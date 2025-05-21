@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb_flutter/app/view/details_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -80,7 +81,7 @@ class HomePage extends StatelessWidget {
                   height: 240,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: const [
+                    children: [
                       _MovieCard(
                         image: 'https://image.tmdb.org/t/p/w500/ochi.jpg',
                         title: 'THE LEGEND OF OCHI',
@@ -113,7 +114,7 @@ class HomePage extends StatelessWidget {
                   height: 180,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: const [
+                    children: [
                       _MovieCard(
                         image: 'https://image.tmdb.org/t/p/w500/minecraft.jpg',
                         title: 'A MINECRAFT MOVIE',
@@ -225,51 +226,58 @@ class _MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: borderColor != null ? Border.all(color: borderColor!, width: 3) : null,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
-        image: DecorationImage(
-          image: NetworkImage(image),
-          fit: BoxFit.cover,
-        ),
-      ),
-      alignment: Alignment.bottomLeft,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const DetailsPage()),
+        );
+      },
       child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(8),
+        width: 140,
+        margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.0),
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
+          borderRadius: BorderRadius.circular(20),
+          border: borderColor != null ? Border.all(color: borderColor!, width: 3) : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+          image: DecorationImage(
+            image: NetworkImage(image),
+            fit: BoxFit.cover,
           ),
         ),
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-            shadows: [
-              Shadow(
-                color: Colors.black54,
-                blurRadius: 4,
-                offset: Offset(0, 1),
-              ),
-            ],
+        alignment: Alignment.bottomLeft,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.0),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
           ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
+          child: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              shadows: [
+                Shadow(
+                  color: Colors.black54,
+                  blurRadius: 4,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );
