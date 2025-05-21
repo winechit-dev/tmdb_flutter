@@ -85,8 +85,7 @@ class HomePage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding:
-                              EdgeInsets.zero,
+                          contentPadding: EdgeInsets.zero,
                         ),
                         style: const TextStyle(color: Colors.black),
                       ),
@@ -245,10 +244,13 @@ class _MovieCardState extends State<_MovieCard> {
   }
 
   Future<void> _checkFavoriteStatus() async {
-    final isFavorite = await context.read<FavoriteMoviesCubit>().isMovieFavorite(widget.movie.id);
-    setState(() {
-      _isFavorite = isFavorite;
-    });
+    final cubit = context.read<FavoriteMoviesCubit>();
+    final isFavorite = await cubit.isMovieFavorite(widget.movie.id);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+    }
   }
 
   @override
@@ -320,7 +322,8 @@ class _MovieCardState extends State<_MovieCard> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.star, size: 16, color: Colors.amber),
+                            const Icon(Icons.star,
+                                size: 16, color: Colors.amber),
                             const SizedBox(width: 4),
                             Text(
                               widget.movie.voteAverage.toStringAsFixed(1),
@@ -342,8 +345,10 @@ class _MovieCardState extends State<_MovieCard> {
               right: 8,
               child: GestureDetector(
                 onTap: () async {
-                  await context.read<FavoriteMoviesCubit>().toggleFavorite(widget.movie);
-                  _checkFavoriteStatus();
+                  await context
+                      .read<FavoriteMoviesCubit>()
+                      .toggleFavorite(widget.movie);
+                  await _checkFavoriteStatus();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(4),

@@ -22,10 +22,13 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   Future<void> _checkFavoriteStatus() async {
-    final isFavorite = await context.read<FavoriteMoviesCubit>().isMovieFavorite(widget.movie.id);
-    setState(() {
-      _isFavorite = isFavorite;
-    });
+    final cubit = context.read<FavoriteMoviesCubit>();
+    final isFavorite = await cubit.isMovieFavorite(widget.movie.id);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+    }
   }
 
   @override
@@ -67,17 +70,21 @@ class _DetailsPageState extends State<DetailsPage> {
                     top: 16,
                     right: 16,
                     child: _CircleButton(
-                      icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      icon:
+                          _isFavorite ? Icons.favorite : Icons.favorite_border,
                       onTap: () async {
-                        await context.read<FavoriteMoviesCubit>().toggleFavorite(widget.movie);
-                        _checkFavoriteStatus();
+                        await context
+                            .read<FavoriteMoviesCubit>()
+                            .toggleFavorite(widget.movie);
+                        await _checkFavoriteStatus();
                       },
                     ),
                   ),
                   Positioned(
                     left: 24,
                     bottom: 0,
-                    child: _RatingIndicator(percent: widget.movie.voteAverage / 10),
+                    child: _RatingIndicator(
+                        percent: widget.movie.voteAverage / 10,),
                   ),
                   const Positioned(
                     left: 100,
@@ -140,30 +147,30 @@ class _DetailsPageState extends State<DetailsPage> {
                     _CastCard(
                         name: 'Helena Zengel',
                         image:
-                            'https://randomuser.me/api/portraits/women/1.jpg'),
+                            'https://randomuser.me/api/portraits/women/1.jpg',),
                     _CastCard(
                         name: 'Finn Wolfhard',
-                        image: 'https://randomuser.me/api/portraits/men/2.jpg'),
+                        image: 'https://randomuser.me/api/portraits/men/2.jpg',),
                     _CastCard(
                         name: 'Emily Watson',
                         image:
-                            'https://randomuser.me/api/portraits/women/3.jpg'),
+                            'https://randomuser.me/api/portraits/women/3.jpg',),
                     _CastCard(
                         name: 'Willem Dafoe',
-                        image: 'https://randomuser.me/api/portraits/men/4.jpg'),
+                        image: 'https://randomuser.me/api/portraits/men/4.jpg',),
                     _CastCard(
                         name: 'Razvan Stoica',
-                        image: 'https://randomuser.me/api/portraits/men/5.jpg'),
+                        image: 'https://randomuser.me/api/portraits/men/5.jpg',),
                     _CastCard(
                         name: 'Carol B.',
                         image:
-                            'https://randomuser.me/api/portraits/women/6.jpg'),
+                            'https://randomuser.me/api/portraits/women/6.jpg',),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Categories',
                   style: TextStyle(
@@ -175,7 +182,7 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
               const SizedBox(height: 12),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Wrap(
                   spacing: 8,
                   children: [
@@ -187,7 +194,7 @@ class _DetailsPageState extends State<DetailsPage> {
               ),
               const SizedBox(height: 24),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Recommendations',
                   style: TextStyle(
@@ -202,14 +209,14 @@ class _DetailsPageState extends State<DetailsPage> {
                 height: 180,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: const [
                     _RecommendationCard(
-                        image: 'https://image.tmdb.org/t/p/w500/rec1.jpg'),
+                        image: 'https://image.tmdb.org/t/p/w500/rec1.jpg',),
                     _RecommendationCard(
-                        image: 'https://image.tmdb.org/t/p/w500/rec2.jpg'),
+                        image: 'https://image.tmdb.org/t/p/w500/rec2.jpg',),
                     _RecommendationCard(
-                        image: 'https://image.tmdb.org/t/p/w500/rec3.jpg'),
+                        image: 'https://image.tmdb.org/t/p/w500/rec3.jpg',),
                   ],
                 ),
               ),

@@ -13,10 +13,12 @@ class FavoriteMoviesCubit extends Cubit<FavoriteMoviesState> {
       emit(FavoriteMoviesLoading());
       final movies = await _repository.getFavoriteMovies();
       final favoriteMovieIds = movies.map((m) => m.id).toSet();
-      emit(FavoriteMoviesLoaded(
-        movies: movies,
-        favoriteMovieIds: favoriteMovieIds,
-      ));
+      emit(
+        FavoriteMoviesLoaded(
+          movies: movies,
+          favoriteMovieIds: favoriteMovieIds,
+        ),
+      );
     } catch (e) {
       emit(FavoriteMoviesError(e.toString()));
     }
@@ -39,4 +41,4 @@ class FavoriteMoviesCubit extends Cubit<FavoriteMoviesState> {
   Future<bool> isMovieFavorite(int movieId) async {
     return _repository.isMovieFavorite(movieId);
   }
-} 
+}
