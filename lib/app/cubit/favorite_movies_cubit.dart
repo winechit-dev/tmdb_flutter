@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_state.dart';
-import 'package:tmdb_flutter/app/data/repository/favorite_movies_repository.dart';
+import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
 
 class FavoriteMoviesCubit extends Cubit<FavoriteMoviesState> {
   FavoriteMoviesCubit(this._repository) : super(FavoriteMoviesInitial());
 
-  final FavoriteMoviesRepository _repository;
+  final MoviesRepository _repository;
 
   Future<void> loadFavoriteMovies() async {
     try {
