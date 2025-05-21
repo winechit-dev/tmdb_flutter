@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_flutter/counter/counter.dart';
 import 'package:tmdb_flutter/l10n/l10n.dart';
+import 'package:tmdb_flutter/app/view/home_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -16,7 +17,7 @@ class App extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const HomePage(),
     );
   }
 }
