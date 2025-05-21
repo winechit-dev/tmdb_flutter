@@ -6,6 +6,7 @@ import 'package:tmdb_flutter/app/data/local/database_helper.dart';
 import 'package:tmdb_flutter/app/data/local/favorite_movies_local_data_source.dart';
 import 'package:tmdb_flutter/app/data/remote/movie_api.dart';
 import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
+import 'package:tmdb_flutter/app/cubit/movie_details_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -31,5 +32,6 @@ Future<void> configureDependencies() async {
     )
     ..registerFactory<FavoriteMoviesCubit>(
       () => FavoriteMoviesCubit(getIt<MoviesRepository>()),
-    );
+    )
+    ..registerFactory(() => MovieDetailsCubit(getIt()));
 }

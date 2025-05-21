@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
+import 'package:tmdb_flutter/app/cubit/movie_details_cubit.dart';
 import 'package:tmdb_flutter/app/injection.dart';
 import 'package:tmdb_flutter/app/view/main_page.dart';
 
@@ -17,6 +18,9 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<FavoriteMoviesCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<MovieDetailsCubit>(),
         ),
       ],
       child: MaterialApp(
