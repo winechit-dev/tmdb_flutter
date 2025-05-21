@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_flutter/app/view/details_page.dart';
+import 'package:tmdb_flutter/app/view/favorites_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -183,7 +184,13 @@ class HomePage extends StatelessWidget {
             ),
           ],
           currentIndex: 0,
-          onTap: (index) {},
+          onTap: (index) {
+            if (index == 1) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const FavoritesPage()),
+              );
+            }
+          },
         ),
       ),
     );
