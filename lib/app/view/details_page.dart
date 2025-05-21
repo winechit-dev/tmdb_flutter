@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
 
 class DetailsPage extends StatelessWidget {
-  final Movie movie;
+  const DetailsPage({required this.movie, super.key});
 
-  const DetailsPage({super.key, required this.movie});
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,9 @@ class DetailsPage extends StatelessWidget {
                         bottomRight: Radius.circular(32),
                       ),
                       image: DecorationImage(
-                        image: NetworkImage('https://image.tmdb.org/t/p/w500${movie.backdropPath ?? movie.posterPath}'),
+                        image: NetworkImage(
+                          'https://image.tmdb.org/t/p/w500${movie.backdropPath ?? movie.posterPath}',
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -52,13 +54,13 @@ class DetailsPage extends StatelessWidget {
                     bottom: 0,
                     child: _RatingIndicator(percent: movie.voteAverage / 10),
                   ),
-                  Positioned(
+                  const Positioned(
                     left: 100,
                     bottom: 32,
                     right: 16,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'The Legend of Ochi',
                           style: TextStyle(
@@ -82,7 +84,7 @@ class DetailsPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'In a remote village on the island of Carpathia, a shy farm girl named Yuri is raised to fear an elusive animal species known as ochi. But when Yuri discovers a wounded baby ochi has been left behind, she escapes on a quest to bring him home.',
                   style: TextStyle(
@@ -93,7 +95,7 @@ class DetailsPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   'Cast',
                   style: TextStyle(
@@ -108,14 +110,29 @@ class DetailsPage extends StatelessWidget {
                 height: 90,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: const [
-                    _CastCard(name: 'Helena Zengel', image: 'https://randomuser.me/api/portraits/women/1.jpg'),
-                    _CastCard(name: 'Finn Wolfhard', image: 'https://randomuser.me/api/portraits/men/2.jpg'),
-                    _CastCard(name: 'Emily Watson', image: 'https://randomuser.me/api/portraits/women/3.jpg'),
-                    _CastCard(name: 'Willem Dafoe', image: 'https://randomuser.me/api/portraits/men/4.jpg'),
-                    _CastCard(name: 'Razvan Stoica', image: 'https://randomuser.me/api/portraits/men/5.jpg'),
-                    _CastCard(name: 'Carol B.', image: 'https://randomuser.me/api/portraits/women/6.jpg'),
+                    _CastCard(
+                        name: 'Helena Zengel',
+                        image:
+                            'https://randomuser.me/api/portraits/women/1.jpg'),
+                    _CastCard(
+                        name: 'Finn Wolfhard',
+                        image: 'https://randomuser.me/api/portraits/men/2.jpg'),
+                    _CastCard(
+                        name: 'Emily Watson',
+                        image:
+                            'https://randomuser.me/api/portraits/women/3.jpg'),
+                    _CastCard(
+                        name: 'Willem Dafoe',
+                        image: 'https://randomuser.me/api/portraits/men/4.jpg'),
+                    _CastCard(
+                        name: 'Razvan Stoica',
+                        image: 'https://randomuser.me/api/portraits/men/5.jpg'),
+                    _CastCard(
+                        name: 'Carol B.',
+                        image:
+                            'https://randomuser.me/api/portraits/women/6.jpg'),
                   ],
                 ),
               ),
@@ -132,11 +149,11 @@ class DetailsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Wrap(
                   spacing: 8,
-                  children: const [
+                  children: [
                     _CategoryChip(label: 'Fantasy'),
                     _CategoryChip(label: 'Adventure'),
                     _CategoryChip(label: 'Family'),
@@ -162,9 +179,12 @@ class DetailsPage extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   children: const [
-                    _RecommendationCard(image: 'https://image.tmdb.org/t/p/w500/rec1.jpg'),
-                    _RecommendationCard(image: 'https://image.tmdb.org/t/p/w500/rec2.jpg'),
-                    _RecommendationCard(image: 'https://image.tmdb.org/t/p/w500/rec3.jpg'),
+                    _RecommendationCard(
+                        image: 'https://image.tmdb.org/t/p/w500/rec1.jpg'),
+                    _RecommendationCard(
+                        image: 'https://image.tmdb.org/t/p/w500/rec2.jpg'),
+                    _RecommendationCard(
+                        image: 'https://image.tmdb.org/t/p/w500/rec3.jpg'),
                   ],
                 ),
               ),
@@ -178,13 +198,13 @@ class DetailsPage extends StatelessWidget {
 }
 
 class _CircleButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-
   const _CircleButton({
     required this.icon,
     required this.onTap,
   });
+
+  final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -202,19 +222,19 @@ class _CircleButton extends StatelessWidget {
 }
 
 class _RatingIndicator extends StatelessWidget {
-  final double percent;
-
   const _RatingIndicator({required this.percent});
+
+  final double percent;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 60,
       height: 60,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 8,
@@ -248,9 +268,10 @@ class _RatingIndicator extends StatelessWidget {
 }
 
 class _CastCard extends StatelessWidget {
+  const _CastCard({required this.name, required this.image});
+
   final String name;
   final String image;
-  const _CastCard({required this.name, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -282,8 +303,9 @@ class _CastCard extends StatelessWidget {
 }
 
 class _CategoryChip extends StatelessWidget {
-  final String label;
   const _CategoryChip({required this.label});
+
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -303,8 +325,9 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _RecommendationCard extends StatelessWidget {
-  final String image;
   const _RecommendationCard({required this.image});
+
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -327,4 +350,4 @@ class _RecommendationCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
