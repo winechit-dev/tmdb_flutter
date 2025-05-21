@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
 import 'package:tmdb_flutter/app/view/details_page.dart';
@@ -219,7 +220,7 @@ class _CategoryChip extends StatelessWidget {
   }
 }
 
-class _MovieCard extends StatelessWidget {
+class _MovieCard extends StatefulWidget {
   const _MovieCard({
     required this.movie,
     this.small = false,
@@ -231,23 +232,43 @@ class _MovieCard extends StatelessWidget {
   final Color? borderColor;
 
   @override
+  State<_MovieCard> createState() => _MovieCardState();
+}
+
+class _MovieCardState extends State<_MovieCard> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+  }
+
+  Future<void> _checkFavoriteStatus() async {
+    final isFavorite = await context.read<FavoriteMoviesCubit>().isMovieFavorite(widget.movie.id);
+    setState(() {
+      _isFavorite = isFavorite;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute<void>(
-            builder: (context) => DetailsPage(movie: movie),
+            builder: (context) => DetailsPage(movie: widget.movie),
           ),
         );
       },
       child: Container(
-        width: small ? 120 : 220,
+        width: widget.small ? 120 : 220,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          border: borderColor != null
-              ? Border.all(color: borderColor!, width: 2)
+          border: widget.borderColor != null
+              ? Border.all(color: widget.borderColor!, width: 2)
               : null,
           boxShadow: const [
             BoxShadow(
@@ -257,61 +278,87 @@ class _MovieCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(22)),
-              child: Image.network(
-                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                height: small ? 180 : 320,
-                width: small ? 120 : 220,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: small ? 180 : 320,
-                    width: small ? 120 : 220,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.error_outline),
-                  );
-                },
-              ),
-            ),
-            if (!small) ...[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(22)),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
+                    height: widget.small ? 180 : 320,
+                    width: widget.small ? 120 : 220,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: widget.small ? 180 : 320,
+                        width: widget.small ? 120 : 220,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.error_outline),
+                      );
+                    },
+                  ),
+                ),
+                if (!widget.small) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.star, size: 16, color: Colors.amber),
-                        const SizedBox(width: 4),
                         Text(
-                          movie.voteAverage.toStringAsFixed(1),
+                          widget.movie.title,
                           style: const TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, size: 16, color: Colors.amber),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.movie.voteAverage.toStringAsFixed(1),
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
+                ],
+              ],
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () async {
+                  await context.read<FavoriteMoviesCubit>().toggleFavorite(widget.movie);
+                  _checkFavoriteStatus();
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.7),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    _isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: _isFavorite ? Colors.red : Colors.black,
+                    size: 20,
+                  ),
                 ),
               ),
-            ],
+            ),
           ],
         ),
       ),

@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 
-class DetailsPage extends StatelessWidget {
+class DetailsPage extends StatefulWidget {
   const DetailsPage({required this.movie, super.key});
 
   final Movie movie;
+
+  @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+  }
+
+  Future<void> _checkFavoriteStatus() async {
+    final isFavorite = await context.read<FavoriteMoviesCubit>().isMovieFavorite(widget.movie.id);
+    setState(() {
+      _isFavorite = isFavorite;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +49,7 @@ class DetailsPage extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: NetworkImage(
-                          'https://image.tmdb.org/t/p/w500${movie.backdropPath ?? movie.posterPath}',
+                          'https://image.tmdb.org/t/p/w500${widget.movie.backdropPath ?? widget.movie.posterPath}',
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -45,14 +67,17 @@ class DetailsPage extends StatelessWidget {
                     top: 16,
                     right: 16,
                     child: _CircleButton(
-                      icon: Icons.favorite_border,
-                      onTap: () {},
+                      icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      onTap: () async {
+                        await context.read<FavoriteMoviesCubit>().toggleFavorite(widget.movie);
+                        _checkFavoriteStatus();
+                      },
                     ),
                   ),
                   Positioned(
                     left: 24,
                     bottom: 0,
-                    child: _RatingIndicator(percent: movie.voteAverage / 10),
+                    child: _RatingIndicator(percent: widget.movie.voteAverage / 10),
                   ),
                   const Positioned(
                     left: 100,
