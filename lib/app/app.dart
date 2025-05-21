@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tmdb_flutter/app/view/main_page.dart';
 import 'api/movie_api.dart';
 import 'cubit/home_cubit.dart';
 import 'view/home_page.dart';
@@ -17,7 +18,7 @@ class App extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => HomeCubit(MovieAPI()),
-        child: const HomePage(),
+        child: const MainPage(),
       ),
     );
   }
