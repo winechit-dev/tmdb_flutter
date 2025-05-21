@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../api/models/movie_responses.dart';
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage({super.key});
+  final Movie movie;
+
+  const DetailsPage({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +20,13 @@ class DetailsPage extends StatelessWidget {
                   Container(
                     height: 320,
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(32),
                         bottomRight: Radius.circular(32),
                       ),
                       image: DecorationImage(
-                        image: NetworkImage('https://image.tmdb.org/t/p/w500/ochi.jpg'),
+                        image: NetworkImage('https://image.tmdb.org/t/p/w500${movie.backdropPath ?? movie.posterPath}'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -47,7 +50,7 @@ class DetailsPage extends StatelessWidget {
                   Positioned(
                     left: 24,
                     bottom: 0,
-                    child: _RatingIndicator(percent: 0.58),
+                    child: _RatingIndicator(percent: movie.voteAverage / 10),
                   ),
                   Positioned(
                     left: 100,
@@ -177,20 +180,22 @@ class DetailsPage extends StatelessWidget {
 class _CircleButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
-  const _CircleButton({required this.icon, required this.onTap});
+
+  const _CircleButton({
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white.withOpacity(0.7),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(icon, color: Colors.black, size: 24),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.7),
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: Icon(icon),
+        onPressed: onTap,
       ),
     );
   }
@@ -198,37 +203,46 @@ class _CircleButton extends StatelessWidget {
 
 class _RatingIndicator extends StatelessWidget {
   final double percent;
+
   const _RatingIndicator({required this.percent});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 48,
-          height: 48,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              CircularProgressIndicator(
-                value: percent,
-                strokeWidth: 5,
-                backgroundColor: Colors.grey[300],
-                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFB388F6)),
-              ),
-              Center(
-                child: Text(
-                  '${(percent * 100).round()}%',
-                  style: const TextStyle(
-                    color: Color(0xFF7C4DFF),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 2),
           ),
-        ),
-      ],
+        ],
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: CircularProgressIndicator(
+              value: percent,
+              backgroundColor: Colors.grey[200],
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
+              strokeWidth: 4,
+            ),
+          ),
+          Center(
+            child: Text(
+              '${(percent * 100).toInt()}%',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

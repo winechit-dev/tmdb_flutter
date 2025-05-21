@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tmdb_flutter/app/view/details_page.dart';
-import 'package:tmdb_flutter/app/view/favorites_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubit/home_cubit.dart';
+import '../cubit/home_state.dart';
+import '../api/models/movie_responses.dart';
+import 'details_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,184 +17,173 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         toolbarHeight: 0,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                const Text(
-                  'Welcome,',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          if (state is HomeInitial) {
+            context.read<HomeCubit>().loadHomeData();
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is HomeLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state is HomeError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(state.message),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<HomeCubit>().refreshHomeData();
+                    },
+                    child: const Text('Retry'),
                   ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Millions of movies, TV shows and people to discover. Explore now.',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: const TextStyle(color: Colors.black54),
-                    prefixIcon: const Icon(Icons.search, color: Colors.black54),
-                    filled: true,
-                    fillColor: const Color(0xFFE7E2EC),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  ),
-                  style: const TextStyle(color: Colors.black),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 36,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
+                ],
+              ),
+            );
+          }
+
+          if (state is HomeLoaded) {
+            return RefreshIndicator(
+              onRefresh: () => context.read<HomeCubit>().refreshHomeData(),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _CategoryChip(label: 'All', selected: true),
-                      _CategoryChip(label: 'Action'),
-                      _CategoryChip(label: 'Adventure'),
-                      _CategoryChip(label: 'Animation'),
-                      _CategoryChip(label: 'Comedy'),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Welcome,',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Millions of movies, TV shows and people to discover. Explore now.',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: const TextStyle(color: Colors.black54),
+                          prefixIcon: const Icon(Icons.search, color: Colors.black54),
+                          filled: true,
+                          fillColor: const Color(0xFFE7E2EC),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        ),
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 36,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.genres.genres.length,
+                          itemBuilder: (context, index) {
+                            final genre = state.genres.genres[index];
+                            return _CategoryChip(
+                              label: genre.name,
+                              selected: index == 0,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Today Trending',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 240,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.trendingMovies.results.length,
+                          itemBuilder: (context, index) {
+                            final movie = state.trendingMovies.results[index];
+                            return _MovieCard(
+                              movie: movie,
+                              borderColor: const Color(0xFFF9D949),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Popular',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 180,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.popularMovies.results.length,
+                          itemBuilder: (context, index) {
+                            final movie = state.popularMovies.results[index];
+                            return _MovieCard(
+                              movie: movie,
+                              small: true,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Upcoming',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 180,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.upcomingMovies.results.length,
+                          itemBuilder: (context, index) {
+                            final movie = state.upcomingMovies.results[index];
+                            return _MovieCard(
+                              movie: movie,
+                              small: true,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Today Trending',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 240,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/ochi.jpg',
-                        title: 'THE LEGEND OF OCHI',
-                        borderColor: Color(0xFFF9D949),
-                      ),
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/finaldestination.jpg',
-                        title: 'FINAL DESTINATION BLOODLINES',
-                        borderColor: Color(0xFFF9D949),
-                      ),
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/mi.jpg',
-                        title: 'MISSION: IMPOSSIBLE',
-                        borderColor: Color(0xFFF9D949),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Popular',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 180,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/minecraft.jpg',
-                        title: 'A MINECRAFT MOVIE',
-                      ),
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/finaldestination.jpg',
-                        title: 'FINAL DESTINATION BLOODLINES',
-                      ),
-                      _MovieCard(
-                        image: 'https://image.tmdb.org/t/p/w500/snowwhite.jpg',
-                        title: 'SNOW WHITE',
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Upcoming',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 24),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFF3EDF7),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(32),
-            topRight: Radius.circular(32),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: Color(0xFFB388F6),
-          unselectedItemColor: Colors.black38,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              label: 'Discover',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border),
-              label: 'Favorites',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              label: 'Settings',
-            ),
-          ],
-          currentIndex: 0,
-          onTap: (index) {
-            if (index == 1) {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const FavoritesPage()),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -225,66 +217,97 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _MovieCard extends StatelessWidget {
-  final String image;
-  final String title;
+  final Movie movie;
   final bool small;
   final Color? borderColor;
-  const _MovieCard({required this.image, required this.title, this.small = false, this.borderColor});
+  const _MovieCard({
+    required this.movie,
+    this.small = false,
+    this.borderColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const DetailsPage()),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailsPage(movie: movie),
+          ),
         );
       },
       child: Container(
-        width: 140,
+        width: small ? 120 : 220,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: borderColor != null ? Border.all(color: borderColor!, width: 3) : null,
-          boxShadow: [
+          borderRadius: BorderRadius.circular(24),
+          border: borderColor != null
+              ? Border.all(color: borderColor!, width: 2)
+              : null,
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, 4),
+              blurRadius: 6,
+              offset: Offset(0, 2),
             ),
           ],
-          image: DecorationImage(
-            image: NetworkImage(image),
-            fit: BoxFit.cover,
-          ),
         ),
-        alignment: Alignment.bottomLeft,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.0),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                height: small ? 180 : 320,
+                width: small ? 120 : 220,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: small ? 180 : 320,
+                    width: small ? 120 : 220,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.error_outline),
+                  );
+                },
+              ),
             ),
-          ),
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              shadows: [
-                Shadow(
-                  color: Colors.black54,
-                  blurRadius: 4,
-                  offset: Offset(0, 1),
+            if (!small) ...[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      movie.title,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.star, size: 16, color: Colors.amber),
+                        const SizedBox(width: 4),
+                        Text(
+                          movie.voteAverage.toStringAsFixed(1),
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+              ),
+            ],
+          ],
         ),
       ),
     );
