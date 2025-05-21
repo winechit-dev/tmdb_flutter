@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -13,11 +13,6 @@ class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
-  final MoviesResponse trendingMovies;
-  final MoviesResponse popularMovies;
-  final MoviesResponse upcomingMovies;
-  final GenresResponse genres;
-
   const HomeLoaded({
     required this.trendingMovies,
     required this.popularMovies,
@@ -25,15 +20,21 @@ class HomeLoaded extends HomeState {
     required this.genres,
   });
 
+  final MoviesResponse trendingMovies;
+  final MoviesResponse popularMovies;
+  final MoviesResponse upcomingMovies;
+  final GenresResponse genres;
+
   @override
-  List<Object?> get props => [trendingMovies, popularMovies, upcomingMovies, genres];
+  List<Object?> get props =>
+      [trendingMovies, popularMovies, upcomingMovies, genres];
 }
 
 class HomeError extends HomeState {
-  final String message;
-
   const HomeError(this.message);
+
+  final String message;
 
   @override
   List<Object?> get props => [message];
-} 
+}
