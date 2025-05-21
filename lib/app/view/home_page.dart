@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/home_cubit.dart';
-import '../cubit/home_state.dart';
-import '../api/models/movie_responses.dart';
-import 'details_page.dart';
+import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
+import 'package:tmdb_flutter/app/cubit/home_state.dart';
+import 'package:tmdb_flutter/app/view/details_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
               onRefresh: () => context.read<HomeCubit>().refreshHomeData(),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -76,14 +76,16 @@ class HomePage extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Search',
                           hintStyle: const TextStyle(color: Colors.black54),
-                          prefixIcon: const Icon(Icons.search, color: Colors.black54),
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.black54),
                           filled: true,
                           fillColor: const Color(0xFFE7E2EC),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                          contentPadding:
+                              EdgeInsets.zero,
                         ),
                         style: const TextStyle(color: Colors.black),
                       ),
@@ -190,9 +192,10 @@ class HomePage extends StatelessWidget {
 }
 
 class _CategoryChip extends StatelessWidget {
+  const _CategoryChip({required this.label, this.selected = false});
+
   final String label;
   final bool selected;
-  const _CategoryChip({required this.label, this.selected = false});
 
   @override
   Widget build(BuildContext context) {
@@ -217,14 +220,15 @@ class _CategoryChip extends StatelessWidget {
 }
 
 class _MovieCard extends StatelessWidget {
-  final Movie movie;
-  final bool small;
-  final Color? borderColor;
   const _MovieCard({
     required this.movie,
     this.small = false,
     this.borderColor,
   });
+
+  final Movie movie;
+  final bool small;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +236,7 @@ class _MovieCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (context) => DetailsPage(movie: movie),
           ),
         );
@@ -257,7 +261,8 @@ class _MovieCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(22)),
               child: Image.network(
                 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                 height: small ? 180 : 320,
@@ -312,4 +317,4 @@ class _MovieCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
