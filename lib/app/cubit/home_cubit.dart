@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tmdb_flutter/app/api/movie_api.dart';
+import 'package:tmdb_flutter/app/data/remote/movie_api.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {

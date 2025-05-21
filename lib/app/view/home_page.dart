@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';

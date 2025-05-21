@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_state.dart';
 import 'package:tmdb_flutter/app/data/repository/favorite_movies_repository.dart';
 

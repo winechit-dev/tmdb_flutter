@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 
 class MovieAPI {
 

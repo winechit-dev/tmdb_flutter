@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 
 abstract class FavoriteMoviesState extends Equatable {
   const FavoriteMoviesState();

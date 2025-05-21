@@ -1,4 +1,4 @@
-import 'package:tmdb_flutter/app/api/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/data/local/favorite_movies_local_data_source.dart';
 
 class FavoriteMoviesRepository {
