@@ -67,168 +67,166 @@ class _DetailsPageState extends State<DetailsPage> {
               state is MovieDetailsLoaded ? state.movieDetails : null;
           final credits = state is MovieDetailsLoaded ? state.credits : null;
 
-          return SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 320,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(32),
-                            bottomRight: Radius.circular(32),
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      height: 320,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(32),
+                          bottomRight: Radius.circular(32),
+                        ),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://image.tmdb.org/t/p/w500${widget.movie.backdropPath ?? widget.movie.posterPath}',
                           ),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              'https://image.tmdb.org/t/p/w500${widget.movie.backdropPath ?? widget.movie.posterPath}',
-                            ),
-                            fit: BoxFit.cover,
-                          ),
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      Positioned(
-                        top: 16,
-                        left: 16,
-                        child: _CircleButton(
-                          icon: Icons.arrow_back,
-                          onTap: () => Navigator.of(context).pop(),
-                        ),
-                      ),
-                      Positioned(
-                        top: 16,
-                        right: 16,
-                        child: _CircleButton(
-                          icon: _isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          onTap: () async {
-                            await context
-                                .read<FavoriteMoviesCubit>()
-                                .toggleFavorite(widget.movie);
-                            await _checkFavoriteStatus();
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        left: 24,
-                        bottom: 0,
-                        child: _RatingIndicator(
-                          percent: widget.movie.voteAverage / 10,
-                        ),
-                      ),
-                      Positioned(
-                        left: 100,
-                        bottom: 32,
-                        right: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.movie.title,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            if (movieDetails != null) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                movieDetails.genres
-                                    .map((g) => g.name)
-                                    .join(', '),
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      widget.movie.overview,
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
                       ),
                     ),
-                  ),
-                  if (movieDetails != null) ...[
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
+                    Positioned(
+                      top: 16 + MediaQuery.of(context).viewPadding.top,
+                      left: 16,
+                      child: _CircleButton(
+                        icon: Icons.arrow_back,
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    Positioned(
+                      top: 16 + MediaQuery.of(context).viewPadding.top,
+                      right: 16,
+                      child: _CircleButton(
+                        icon: _isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        onTap: () async {
+                          await context
+                              .read<FavoriteMoviesCubit>()
+                              .toggleFavorite(widget.movie);
+                          await _checkFavoriteStatus();
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      left: 24,
+                      bottom: 32,
+                      child: _RatingIndicator(
+                        percent: widget.movie.voteAverage / 10,
+                      ),
+                    ),
+                    Positioned(
+                      left: 100,
+                      bottom: 32,
+                      right: 16,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.access_time, color: Colors.black54),
-                          const SizedBox(width: 8),
                           Text(
-                            '${movieDetails.runtime} min',
+                            widget.movie.title,
                             style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 24),
-                          const Icon(
-                            Icons.calendar_today,
-                            color: Colors.black54,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            movieDetails.releaseDate ?? 'N/A',
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
+                          if (movieDetails != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              movieDetails.genres
+                                  .map((g) => g.name)
+                                  .join(', '),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
                   ],
-                  if (credits != null) ...[
-                    const SizedBox(height: 24),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'Cast',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    widget.movie.overview,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                if (movieDetails != null) ...[
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.access_time, color: Colors.black54),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${movieDetails.runtime} min',
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 24),
+                        const Icon(
+                          Icons.calendar_today,
+                          color: Colors.black54,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          movieDetails.releaseDate ?? 'N/A',
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 120,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: credits.cast.length,
-                        itemBuilder: (context, index) {
-                          final cast = credits.cast[index];
-                          return _CastCard(
-                            name: cast.name,
-                            image: cast.profilePath != null
-                                ? 'https://image.tmdb.org/t/p/w200${cast.profilePath}'
-                                : 'https://via.placeholder.com/200x300?text=No+Image',
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ],
-              ),
+                if (credits != null) ...[
+                  const SizedBox(height: 24),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Cast',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: credits.cast.length,
+                      itemBuilder: (context, index) {
+                        final cast = credits.cast[index];
+                        return _CastCard(
+                          name: cast.name,
+                          image: cast.profilePath != null
+                              ? 'https://image.tmdb.org/t/p/w200${cast.profilePath}'
+                              : 'https://via.placeholder.com/200x300?text=No+Image',
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
           );
         },
