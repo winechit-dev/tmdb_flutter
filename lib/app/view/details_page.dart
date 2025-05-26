@@ -137,9 +137,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           if (movieDetails != null) ...[
                             const SizedBox(height: 4),
                             Text(
-                              movieDetails.genres
-                                  .map((g) => g.name)
-                                  .join(', '),
+                              movieDetails.genres.map((g) => g.name).join(', '),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

@@ -5,6 +5,7 @@ import 'package:tmdb_flutter/app/cubit/home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repository) : super(HomeInitial());
   final MoviesRepository _repository;
+  MoviesRepository get repository => _repository;
 
   Future<void> loadHomeData() async {
     try {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
+import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/view/details_page.dart';
+import 'package:tmdb_flutter/app/view/search_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -88,6 +89,18 @@ class HomePage extends StatelessWidget {
                           contentPadding: EdgeInsets.zero,
                         ),
                         style: const TextStyle(color: Colors.black),
+                        readOnly: true,
+                        onTap: () {
+                          final repository =
+                              context.read<HomeCubit>().repository;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  SearchPage(repository: repository),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       SizedBox(
@@ -200,7 +213,7 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
+      padding: const EdgeInsets.only(right: 8),
       child: ChoiceChip(
         label: Text(label),
         selected: selected,
@@ -286,8 +299,7 @@ class _MovieCardState extends State<_MovieCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(22)),
+                  borderRadius: BorderRadius.circular(22),
                   child: Image.network(
                     'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
                     height: widget.small ? 180 : 320,
@@ -303,41 +315,6 @@ class _MovieCardState extends State<_MovieCard> {
                     },
                   ),
                 ),
-                if (!widget.small) ...[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.movie.title,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(Icons.star,
-                                size: 16, color: Colors.amber),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.movie.voteAverage.toStringAsFixed(1),
-                              style: const TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ],
             ),
             Positioned(
