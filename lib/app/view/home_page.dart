@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
         ),
         actions: const [
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.zero,
             child: LanguageSwitcher(),
           ),
         ],
