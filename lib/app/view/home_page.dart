@@ -48,6 +48,9 @@ class HomePage extends StatelessWidget {
           }
 
           if (state is HomeLoaded) {
+            final genres = state.genres.genres;
+            final selectedGenreId = state.selectedGenreId;
+
             return RefreshIndicator(
               onRefresh: () => context.read<HomeCubit>().refreshHomeData(),
               child: SingleChildScrollView(
@@ -107,12 +110,19 @@ class HomePage extends StatelessWidget {
                         height: 36,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.genres.genres.length,
+                          itemCount: genres.length,
                           itemBuilder: (context, index) {
-                            final genre = state.genres.genres[index];
+                            final genre = genres[index];
                             return _CategoryChip(
                               label: genre.name,
-                              selected: index == 0,
+                              selected: genre.id == selectedGenreId,
+                              onSelected: (selected) {
+                                if (selected) {
+                                  context
+                                      .read<HomeCubit>()
+                                      .selectGenre(genre.id);
+                                }
+                              },
                             );
                           },
                         ),
@@ -131,9 +141,9 @@ class HomePage extends StatelessWidget {
                         height: 240,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.trendingMovies.results.length,
+                          itemCount: state.filteredTrending.length,
                           itemBuilder: (context, index) {
-                            final movie = state.trendingMovies.results[index];
+                            final movie = state.filteredTrending[index];
                             return _MovieCard(
                               movie: movie,
                               borderColor: const Color(0xFFF9D949),
@@ -155,9 +165,9 @@ class HomePage extends StatelessWidget {
                         height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.popularMovies.results.length,
+                          itemCount: state.filteredPopular.length,
                           itemBuilder: (context, index) {
-                            final movie = state.popularMovies.results[index];
+                            final movie = state.filteredPopular[index];
                             return _MovieCard(
                               movie: movie,
                               small: true,
@@ -179,9 +189,9 @@ class HomePage extends StatelessWidget {
                         height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.upcomingMovies.results.length,
+                          itemCount: state.filteredUpcoming.length,
                           itemBuilder: (context, index) {
-                            final movie = state.upcomingMovies.results[index];
+                            final movie = state.filteredUpcoming[index];
                             return _MovieCard(
                               movie: movie,
                               small: true,
@@ -205,10 +215,12 @@ class HomePage extends StatelessWidget {
 }
 
 class _CategoryChip extends StatelessWidget {
-  const _CategoryChip({required this.label, this.selected = false});
+  const _CategoryChip(
+      {required this.label, this.selected = false, this.onSelected});
 
   final String label;
   final bool selected;
+  final ValueChanged<bool>? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +238,7 @@ class _CategoryChip extends StatelessWidget {
         side: BorderSide(
           color: selected ? Colors.pinkAccent : Colors.black26,
         ),
-        onSelected: (_) {},
+        onSelected: onSelected,
       ),
     );
   }

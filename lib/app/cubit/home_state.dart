@@ -18,16 +18,32 @@ class HomeLoaded extends HomeState {
     required this.popularMovies,
     required this.upcomingMovies,
     required this.genres,
+    required this.filteredTrending,
+    required this.filteredPopular,
+    required this.filteredUpcoming,
+    this.selectedGenreId,
   });
 
   final MoviesResponse trendingMovies;
   final MoviesResponse popularMovies;
   final MoviesResponse upcomingMovies;
   final GenresResponse genres;
+  final int? selectedGenreId;
+  final List<Movie> filteredTrending;
+  final List<Movie> filteredPopular;
+  final List<Movie> filteredUpcoming;
 
   @override
-  List<Object?> get props =>
-      [trendingMovies, popularMovies, upcomingMovies, genres];
+  List<Object?> get props => [
+        trendingMovies,
+        popularMovies,
+        upcomingMovies,
+        genres,
+        selectedGenreId,
+        filteredTrending,
+        filteredPopular,
+        filteredUpcoming
+      ];
 }
 
 class HomeError extends HomeState {
