@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/view/details_page.dart';
 import 'package:tmdb_flutter/app/view/search_page.dart';
+import 'package:tmdb_flutter/app/widgets/language_switcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +19,20 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        toolbarHeight: 0,
+        title: Text(
+          AppLocalizations.of(context).welcome,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: LanguageSwitcher(),
+          ),
+        ],
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -40,7 +55,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       context.read<HomeCubit>().refreshHomeData();
                     },
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context).retry),
                   ),
                 ],
               ),
@@ -59,19 +74,10 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Welcome,',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Millions of movies, TV shows and people to discover. Explore now.',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).welcomeDescription,
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 14,
                         ),
@@ -79,7 +85,7 @@ class HomePage extends StatelessWidget {
                       const SizedBox(height: 24),
                       TextField(
                         decoration: InputDecoration(
-                          hintText: 'Search',
+                          hintText: AppLocalizations.of(context).search,
                           hintStyle: const TextStyle(color: Colors.black54),
                           prefixIcon:
                               const Icon(Icons.search, color: Colors.black54),
@@ -128,9 +134,9 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        'Today Trending',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).todayTrending,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -152,9 +158,9 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        'Popular',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).popular,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -176,9 +182,9 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text(
-                        'Upcoming',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).upcoming,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
