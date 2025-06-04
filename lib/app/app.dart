@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/home_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/movie_details_cubit.dart';
+import 'package:tmdb_flutter/app/data/local/app_settings_local_data_source.dart';
 import 'package:tmdb_flutter/app/injection.dart';
 import 'package:tmdb_flutter/app/providers/localization_provider.dart';
 import 'package:tmdb_flutter/app/view/main_page.dart';
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => LocalizationProvider(),
+          create: (_) => LocalizationProvider(getIt<AppSettingsLocalDataSource>()),
         ),
         BlocProvider(
           create: (context) => getIt<HomeCubit>(),
