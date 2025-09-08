@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
@@ -6,6 +7,7 @@ import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repository) : super(HomeInitial());
   final MoviesRepository _repository;
+  var logger = Logger();
 
   MoviesRepository get repository => _repository;
 
@@ -17,7 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
       final popularMovies = await _repository.getPopularMovies();
       final upcomingMovies = await _repository.getUpcomingMovies();
       final genres = await _repository.getMovieGenres();
-
+      logger.d('Trending Movies: ${trendingMovies.results.first.genreIds}');
       emit(
         HomeLoaded(
           trendingMovies: trendingMovies,
@@ -39,19 +41,19 @@ class HomeCubit extends Cubit<HomeState> {
       final loaded = state as HomeLoaded;
       List<Movie> filter(List<Movie> movies) => genreId == null
           ? movies
-          : movies
-              .where((m) => m.genreIds?.contains(genreId) ?? false)
-              .toList();
-      emit(HomeLoaded(
-        trendingMovies: loaded.trendingMovies,
-        popularMovies: loaded.popularMovies,
-        upcomingMovies: loaded.upcomingMovies,
-        genres: loaded.genres,
-        selectedGenreId: genreId,
-        filteredTrending: filter(loaded.trendingMovies.results),
-        filteredPopular: filter(loaded.popularMovies.results),
-        filteredUpcoming: filter(loaded.upcomingMovies.results),
-      ));
+          : movies.where((m) => m.genreIds.contains(genreId)).toList();
+      emit(
+        HomeLoaded(
+          trendingMovies: loaded.trendingMovies,
+          popularMovies: loaded.popularMovies,
+          upcomingMovies: loaded.upcomingMovies,
+          genres: loaded.genres,
+          selectedGenreId: genreId,
+          filteredTrending: filter(loaded.trendingMovies.results),
+          filteredPopular: filter(loaded.popularMovies.results),
+          filteredUpcoming: filter(loaded.upcomingMovies.results),
+        ),
+      );
     }
   }
 

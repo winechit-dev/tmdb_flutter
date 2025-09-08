@@ -27,11 +27,15 @@ Map<String, dynamic> _$MoviesResponseToJson(MoviesResponse instance) =>
 Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
+      voteAverage: (json['vote_average'] as num).toDouble(),
+      overview: json['overview'] as String,
+      genreIds: (json['genre_ids'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          [],
       posterPath: json['poster_path'] as String?,
       backdropPath: json['backdrop_path'] as String?,
       releaseDate: json['release_date'] as String?,
-      voteAverage: (json['vote_average'] as num).toDouble(),
-      overview: json['overview'] as String,
     );
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
@@ -42,6 +46,7 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'release_date': instance.releaseDate,
       'vote_average': instance.voteAverage,
       'overview': instance.overview,
+      'genre_ids': instance.genreIds,
     };
 
 MovieDetailsResponse _$MovieDetailsResponseFromJson(
@@ -49,9 +54,6 @@ MovieDetailsResponse _$MovieDetailsResponseFromJson(
     MovieDetailsResponse(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
-      posterPath: json['poster_path'] as String?,
-      backdropPath: json['backdrop_path'] as String?,
-      releaseDate: json['release_date'] as String?,
       voteAverage: (json['vote_average'] as num).toDouble(),
       overview: json['overview'] as String,
       genres: (json['genres'] as List<dynamic>)
@@ -61,6 +63,13 @@ MovieDetailsResponse _$MovieDetailsResponseFromJson(
       productionCompanies: (json['production_companies'] as List<dynamic>)
           .map((e) => ProductionCompany.fromJson(e as Map<String, dynamic>))
           .toList(),
+      genreIds: (json['genre_ids'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          [],
+      posterPath: json['poster_path'] as String?,
+      backdropPath: json['backdrop_path'] as String?,
+      releaseDate: json['release_date'] as String?,
     );
 
 Map<String, dynamic> _$MovieDetailsResponseToJson(
@@ -73,6 +82,7 @@ Map<String, dynamic> _$MovieDetailsResponseToJson(
       'release_date': instance.releaseDate,
       'vote_average': instance.voteAverage,
       'overview': instance.overview,
+      'genre_ids': instance.genreIds,
       'genres': instance.genres,
       'runtime': instance.runtime,
       'production_companies': instance.productionCompanies,

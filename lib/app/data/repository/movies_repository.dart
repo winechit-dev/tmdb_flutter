@@ -34,6 +34,7 @@ class MoviesRepository {
               overview: movie['overview'] as String,
               voteAverage: movie['voteAverage'] as double,
               releaseDate: movie['releaseDate'] as String?,
+              genreIds: movie['genreIds'] as List<int>? ?? [],
             ))
         .toList();
   }

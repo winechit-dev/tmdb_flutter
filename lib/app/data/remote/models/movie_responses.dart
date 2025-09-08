@@ -30,10 +30,10 @@ class Movie {
     required this.title,
     required this.voteAverage,
     required this.overview,
+    required this.genreIds,
     this.posterPath,
     this.backdropPath,
     this.releaseDate,
-    this.genreIds,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
@@ -48,8 +48,8 @@ class Movie {
   @JsonKey(name: 'vote_average')
   final double voteAverage;
   final String overview;
-  @JsonKey(name: 'genre_ids')
-  final List<int>? genreIds;
+  @JsonKey(name: 'genre_ids', defaultValue: <int>[])
+  final List<int> genreIds;
 
   Map<String, dynamic> toJson() => _$MovieToJson(this);
 }
@@ -64,6 +64,7 @@ class MovieDetailsResponse extends Movie {
     required this.genres,
     required this.runtime,
     required this.productionCompanies,
+    required super.genreIds,
     super.posterPath,
     super.backdropPath,
     super.releaseDate,

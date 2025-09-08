@@ -125,79 +125,87 @@ class HomePage extends StatelessWidget {
                                   context
                                       .read<HomeCubit>()
                                       .selectGenre(genre.id);
+                                } else {
+                                  context.read<HomeCubit>().selectGenre(null);
                                 }
                               },
                             );
                           },
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      Text(
-                        AppLocalizations.of(context).todayTrending,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      if (state.filteredTrending.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          AppLocalizations.of(context).todayTrending,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 180,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.filteredTrending.length,
-                          itemBuilder: (context, index) {
-                            final movie = state.filteredTrending[index];
-                            return _MovieCard(
-                              movie: movie,
-                              borderColor: const Color(0xFFF9D949),
-                            );
-                          },
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 180,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.filteredTrending.length,
+                            itemBuilder: (context, index) {
+                              final movie = state.filteredTrending[index];
+                              return _MovieCard(
+                                movie: movie,
+                                borderColor: const Color(0xFFF9D949),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        AppLocalizations.of(context).popular,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      ],
+                      if (state.filteredPopular.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          AppLocalizations.of(context).popular,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 180,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.filteredPopular.length,
-                          itemBuilder: (context, index) {
-                            final movie = state.filteredPopular[index];
-                            return _MovieCard(
-                              movie: movie,
-                            );
-                          },
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 180,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.filteredPopular.length,
+                            itemBuilder: (context, index) {
+                              final movie = state.filteredPopular[index];
+                              return _MovieCard(
+                                movie: movie,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        AppLocalizations.of(context).upcoming,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      ],
+                      if (state.filteredUpcoming.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          AppLocalizations.of(context).upcoming,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 180,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.filteredUpcoming.length,
-                          itemBuilder: (context, index) {
-                            final movie = state.filteredUpcoming[index];
-                            return _MovieCard(
-                              movie: movie,
-                            );
-                          },
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 180,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.filteredUpcoming.length,
+                            itemBuilder: (context, index) {
+                              final movie = state.filteredUpcoming[index];
+                              return _MovieCard(
+                                movie: movie,
+                              );
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -205,7 +213,6 @@ class HomePage extends StatelessWidget {
               ),
             );
           }
-
           return const SizedBox.shrink();
         },
       ),
