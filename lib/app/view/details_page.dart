@@ -92,18 +92,19 @@ class _DetailsPageState extends State<DetailsPage> {
                     Positioned(
                       top: 16 + MediaQuery.of(context).viewPadding.top,
                       left: 16,
-                      child: _CircleButton(
-                        icon: Icons.arrow_back,
+                      child: _IconButton(
+                        icon: const Icon(Icons.arrow_back),
                         onTap: () => Navigator.of(context).pop(),
                       ),
                     ),
                     Positioned(
                       top: 16 + MediaQuery.of(context).viewPadding.top,
                       right: 16,
-                      child: _CircleButton(
-                        icon: _isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
+                      child: _IconButton(
+                        icon: Icon(
+                          _isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: _isFavorite ? Colors.red : Colors.black,
+                        ),
                         onTap: () async {
                           await context
                               .read<FavoriteMoviesCubit>()
@@ -228,13 +229,13 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 }
 
-class _CircleButton extends StatelessWidget {
-  const _CircleButton({
+class _IconButton extends StatelessWidget {
+  const _IconButton({
     required this.icon,
     required this.onTap,
   });
 
-  final IconData icon;
+  final Icon icon;
   final VoidCallback onTap;
 
   @override
@@ -257,7 +258,7 @@ class _CircleButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Icon(icon, color: Colors.black87),
+          child: icon,
         ),
       ),
     );
