@@ -277,70 +277,74 @@ class _MovieCardState extends State<_MovieCard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (context) => DetailsPage(movie: widget.movie),
-          ),
-        );
-      },
-      child: Container(
-        width: 120,
-        margin: const EdgeInsets.only(right: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
-                  child: Image.network(
-                    'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      elevation: 0,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => DetailsPage(movie: widget.movie),
+            ),
+          );
+        },
+        child: SizedBox(
+          width: 120,
+          child: Stack(
+            children: [
+              Image.network(
+                'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
+                height: 180,
+                width: 120,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
                     height: 180,
                     width: 120,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 180,
-                        width: 120,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.error_outline),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: GestureDetector(
-                onTap: () async {
-                  await context
-                      .read<FavoriteMoviesCubit>()
-                      .toggleFavorite(widget.movie);
-                  await _checkFavoriteStatus();
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.error_outline, size: 40),
+                  );
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: _isFavorite ? Colors.red : Colors.black,
-                    size: 20,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 180,
+                    width: 120,
+                    color: Colors.grey[200],
+                    child: const Center(
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  );
+                },
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: GestureDetector(
+                  onTap: () async {
+                    await context
+                        .read<FavoriteMoviesCubit>()
+                        .toggleFavorite(widget.movie);
+                    await _checkFavoriteStatus();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.85),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: _isFavorite ? Colors.red : Colors.black54,
+                      size: 22,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
