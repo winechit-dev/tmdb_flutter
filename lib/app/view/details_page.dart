@@ -4,6 +4,7 @@ import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/movie_details_cubit.dart';
 import 'package:tmdb_flutter/app/cubit/movie_details_state.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/widgets/shimmer_details.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({required this.movie, super.key});
@@ -40,7 +41,7 @@ class _DetailsPageState extends State<DetailsPage> {
       body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
         builder: (context, state) {
           if (state is MovieDetailsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const ShimmerDetails();
           }
 
           if (state is MovieDetailsError) {
