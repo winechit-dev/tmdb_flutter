@@ -28,7 +28,6 @@ class SearchPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => SearchCubit(repository),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF9F3FF),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -56,7 +55,6 @@ class SearchPage extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -83,7 +81,7 @@ class SearchPage extends StatelessWidget {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
