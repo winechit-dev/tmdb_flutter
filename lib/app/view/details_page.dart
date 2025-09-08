@@ -37,7 +37,6 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F3FF),
       body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
         builder: (context, state) {
           if (state is MovieDetailsLoading) {
@@ -155,7 +154,6 @@ class _DetailsPageState extends State<DetailsPage> {
                   child: Text(
                     widget.movie.overview,
                     style: const TextStyle(
-                      color: Colors.black87,
                       fontSize: 16,
                     ),
                   ),
@@ -166,25 +164,22 @@ class _DetailsPageState extends State<DetailsPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(Icons.access_time, color: Colors.black54),
+                        const Icon(Icons.access_time),
                         const SizedBox(width: 8),
                         Text(
                           '${movieDetails.runtime} min',
                           style: const TextStyle(
-                            color: Colors.black54,
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(width: 24),
                         const Icon(
                           Icons.calendar_today,
-                          color: Colors.black54,
                         ),
                         const SizedBox(width: 8),
                         Text(
                           movieDetails.releaseDate ?? 'N/A',
                           style: const TextStyle(
-                            color: Colors.black54,
                             fontSize: 16,
                           ),
                         ),
@@ -199,7 +194,6 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: Text(
                       'Cast',
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -339,11 +333,10 @@ class _CastCard extends StatelessWidget {
               height: 60,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
-                return Container(
+                return const SizedBox(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.error_outline),
+                  child: Icon(Icons.error_outline),
                 );
               },
             ),
@@ -352,7 +345,6 @@ class _CastCard extends StatelessWidget {
           Text(
             name,
             style: const TextStyle(
-              color: Colors.black87,
               fontSize: 12,
             ),
             textAlign: TextAlign.center,

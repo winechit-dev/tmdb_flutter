@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
 import 'package:tmdb_flutter/app/cubit/home_state.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
+import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repository) : super(HomeInitial());
@@ -24,7 +24,6 @@ class HomeCubit extends Cubit<HomeState> {
           popularMovies: popularMovies,
           upcomingMovies: upcomingMovies,
           genres: genres,
-          selectedGenreId: null,
           filteredTrending: trendingMovies.results,
           filteredPopular: popularMovies.results,
           filteredUpcoming: upcomingMovies.results,

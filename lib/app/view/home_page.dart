@@ -15,14 +15,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F3FF),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           AppLocalizations.of(context).welcome,
           style: const TextStyle(
-            color: Colors.black,
             fontSize: 32,
             fontWeight: FontWeight.bold,
           ),
@@ -78,7 +76,6 @@ class HomePage extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context).welcomeDescription,
                         style: const TextStyle(
-                          color: Colors.black87,
                           fontSize: 14,
                         ),
                       ),
@@ -137,7 +134,6 @@ class HomePage extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context).todayTrending,
                         style: const TextStyle(
-                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -161,7 +157,6 @@ class HomePage extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context).popular,
                         style: const TextStyle(
-                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -185,7 +180,6 @@ class HomePage extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context).upcoming,
                         style: const TextStyle(
-                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

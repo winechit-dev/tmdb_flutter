@@ -11,7 +11,6 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F3FF),
       appBar: AppBar(
         title: const Text('Favorites'),
         backgroundColor: Colors.transparent,
@@ -52,7 +51,6 @@ class FavoritesPage extends StatelessWidget {
                   'No favorite movies yet',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black54,
                   ),
                 ),
               );
@@ -112,7 +110,8 @@ class _FavoriteMovieCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.network(
                 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                 height: 200,
@@ -128,14 +127,13 @@ class _FavoriteMovieCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     movie.title,
                     style: const TextStyle(
-                      color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -150,7 +148,6 @@ class _FavoriteMovieCard extends StatelessWidget {
                       Text(
                         movie.voteAverage.toStringAsFixed(1),
                         style: const TextStyle(
-                          color: Colors.black87,
                           fontSize: 12,
                         ),
                       ),
@@ -164,4 +161,4 @@ class _FavoriteMovieCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
