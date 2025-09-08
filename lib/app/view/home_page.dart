@@ -141,7 +141,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       SizedBox(
-                        height: 240,
+                        height: 180,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: state.filteredTrending.length,
@@ -172,7 +172,6 @@ class HomePage extends StatelessWidget {
                             final movie = state.filteredPopular[index];
                             return _MovieCard(
                               movie: movie,
-                              small: true,
                             );
                           },
                         ),
@@ -195,7 +194,6 @@ class HomePage extends StatelessWidget {
                             final movie = state.filteredUpcoming[index];
                             return _MovieCard(
                               movie: movie,
-                              small: true,
                             );
                           },
                         ),
@@ -248,12 +246,10 @@ class _CategoryChip extends StatelessWidget {
 class _MovieCard extends StatefulWidget {
   const _MovieCard({
     required this.movie,
-    this.small = false,
     this.borderColor,
   });
 
   final Movie movie;
-  final bool small;
   final Color? borderColor;
 
   @override
@@ -291,20 +287,10 @@ class _MovieCardState extends State<_MovieCard> {
         );
       },
       child: Container(
-        width: widget.small ? 120 : 220,
+        width: 120,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          border: widget.borderColor != null
-              ? Border.all(color: widget.borderColor!, width: 2)
-              : null,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            ),
-          ],
         ),
         child: Stack(
           children: [
@@ -315,13 +301,13 @@ class _MovieCardState extends State<_MovieCard> {
                   borderRadius: BorderRadius.circular(22),
                   child: Image.network(
                     'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
-                    height: widget.small ? 180 : 320,
-                    width: widget.small ? 120 : 220,
+                    height: 180,
+                    width: 120,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        height: widget.small ? 180 : 320,
-                        width: widget.small ? 120 : 220,
+                        height: 180,
+                        width: 120,
                         color: Colors.grey[300],
                         child: const Icon(Icons.error_outline),
                       );
@@ -388,9 +374,10 @@ class _ShimmerHomePlaceholder extends StatelessWidget {
                   return const Padding(
                     padding: EdgeInsets.only(right: 16),
                     child: ShimmerLoading(
-                        height: 180,
-                        width: 120,
-                        borderRadius: BorderRadius.all(Radius.circular(24))),
+                      height: 180,
+                      width: 120,
+                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                    ),
                   );
                 },
               ),
@@ -426,9 +413,9 @@ class _ShimmerHomePlaceholder extends StatelessWidget {
                   return const Padding(
                     padding: EdgeInsets.only(right: 16),
                     child: ShimmerLoading(
-                        height: 180,
-                        width: 120,
-                        borderRadius: BorderRadius.all(Radius.circular(24)),
+                      height: 180,
+                      width: 120,
+                      borderRadius: BorderRadius.all(Radius.circular(24)),
                     ),
                   );
                 },
