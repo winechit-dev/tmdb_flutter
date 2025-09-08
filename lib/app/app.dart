@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tmdb_flutter/app/cubit/favorite_movies_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:tmdb_flutter/app/data/local/app_settings_local_data_source.dart'
 import 'package:tmdb_flutter/app/injection.dart';
 import 'package:tmdb_flutter/app/providers/localization_provider.dart';
 import 'package:tmdb_flutter/app/view/main_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
