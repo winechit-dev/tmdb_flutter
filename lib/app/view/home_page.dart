@@ -8,6 +8,7 @@ import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 import 'package:tmdb_flutter/app/view/details_page.dart';
 import 'package:tmdb_flutter/app/view/search_page.dart';
 import 'package:tmdb_flutter/app/widgets/language_switcher.dart';
+import 'package:tmdb_flutter/app/widgets/shimmer_loading.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,11 +37,11 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           if (state is HomeInitial) {
             context.read<HomeCubit>().loadHomeData();
-            return const Center(child: CircularProgressIndicator());
+            return const _ShimmerHomePlaceholder();
           }
 
           if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const _ShimmerHomePlaceholder();
           }
 
           if (state is HomeError) {
@@ -353,6 +354,87 @@ class _MovieCardState extends State<_MovieCard> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ShimmerHomePlaceholder extends StatelessWidget {
+  const _ShimmerHomePlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            const ShimmerLoading(height: 20, width: 200),
+            const SizedBox(height: 16),
+            const ShimmerLoading(height: 36),
+            const SizedBox(height: 24),
+            const ShimmerLoading(height: 20, width: 150),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 180,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: ShimmerLoading(
+                        height: 180,
+                        width: 120,
+                        borderRadius: BorderRadius.all(Radius.circular(24))),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            const ShimmerLoading(height: 20, width: 100),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 180,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: ShimmerLoading(
+                        height: 180,
+                        width: 120,
+                        borderRadius: BorderRadius.all(Radius.circular(24))),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            const ShimmerLoading(height: 20, width: 100),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 180,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: ShimmerLoading(
+                        height: 180,
+                        width: 120,
+                        borderRadius: BorderRadius.all(Radius.circular(24)),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
