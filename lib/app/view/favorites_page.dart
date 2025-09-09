@@ -58,11 +58,11 @@ class FavoritesPage extends StatelessWidget {
 
             return GridView.builder(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.6,
               ),
               itemCount: state.movies.length,
               itemBuilder: (context, index) {
@@ -71,7 +71,6 @@ class FavoritesPage extends StatelessWidget {
               },
             );
           }
-
           return const SizedBox.shrink();
         },
       ),
@@ -111,18 +110,19 @@ class _FavoriteMovieCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                height: 190,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 190,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.error_outline),
-                  );
-                },
+              Expanded(
+                child: Image.network(
+                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 190,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.error_outline),
+                    );
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
