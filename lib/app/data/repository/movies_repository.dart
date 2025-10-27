@@ -45,8 +45,8 @@ class MoviesRepository {
 
   // Movie API methods
   Future<MoviesResponse> getTrendingTodayMovies({
-    int page = MovieAPI.STARTING_PAGE_INDEX,
-    String language = MovieAPI.LANGUAGE,
+    int page = MovieAPI.startingPageIndex,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getTrendingTodayMovies(page: page, language: language);
   }
@@ -56,28 +56,28 @@ class MoviesRepository {
   }
 
   Future<MoviesResponse> getUpcomingMovies({
-    int page = MovieAPI.STARTING_PAGE_INDEX,
-    String language = MovieAPI.LANGUAGE,
+    int page = MovieAPI.startingPageIndex,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getUpcomingMovies(page: page, language: language);
   }
 
   Future<MoviesResponse> getTopRatedMovies({
-    int page = MovieAPI.STARTING_PAGE_INDEX,
-    String language = MovieAPI.LANGUAGE,
+    int page = MovieAPI.startingPageIndex,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getTopRatedMovies(page: page, language: language);
   }
 
   Future<MoviesResponse> getNowPlayingMovies({
-    int page = MovieAPI.STARTING_PAGE_INDEX,
-    String language = MovieAPI.LANGUAGE,
+    int page = MovieAPI.startingPageIndex,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getNowPlayingMovies(page: page, language: language);
   }
 
   Future<GenresResponse> getMovieGenres({
-    String language = MovieAPI.LANGUAGE,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getMovieGenres(language: language);
   }
@@ -92,8 +92,8 @@ class MoviesRepository {
 
   Future<MoviesResponse> getRecommendations({
     required int movieId,
-    int page = MovieAPI.STARTING_PAGE_INDEX,
-    String language = MovieAPI.LANGUAGE,
+    int page = MovieAPI.startingPageIndex,
+    String language = MovieAPI.defaultLanguage,
   }) async {
     return _movieAPI.getRecommendations(
       movieId: movieId,
@@ -104,7 +104,7 @@ class MoviesRepository {
 
   Future<MoviesResponse> searchMovie({
     required String query,
-    int page = MovieAPI.STARTING_PAGE_INDEX,
+    int page = MovieAPI.startingPageIndex,
   }) async {
     return _movieAPI.searchMovie(query: query, page: page);
   }
