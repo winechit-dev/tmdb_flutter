@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tmdb_flutter/app/data/remote/models/movie_responses.dart';
 
 class MovieAPI {
   MovieAPI() : _dio = Dio(_createBaseOptions());
 
   final Dio _dio;
-  static const String _baseUrl = 'https://api.themoviedb.org/3';
-  static const String _apiKey = '431684f2f57b4a3f0d520afae0ee6a4f';
 
   static const int startingPageIndex = 1;
   static const String defaultLanguage = 'en-US';
@@ -14,10 +13,10 @@ class MovieAPI {
   /// Creates base options for Dio instance
   static BaseOptions _createBaseOptions() {
     return BaseOptions(
-      baseUrl: _baseUrl,
+      baseUrl: dotenv.env['TMDB_BASE_URL']!,
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 3),
-      queryParameters: {'api_key': _apiKey},
+      queryParameters: {'api_key': dotenv.env['TMDB_API_KEY']},
       validateStatus: (status) => status != null && status < 500,
     );
   }
