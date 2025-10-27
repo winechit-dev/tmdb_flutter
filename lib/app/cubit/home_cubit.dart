@@ -7,7 +7,7 @@ import 'package:tmdb_flutter/app/data/repository/movies_repository.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repository) : super(HomeInitial());
   final MoviesRepository _repository;
-  var logger = Logger();
+  Logger logger = Logger();
 
   MoviesRepository get repository => _repository;
 
